@@ -57,7 +57,7 @@ export const waitForLoadingToFinish = () => {
   waitForElementToBeRemoved(
     () => [
       ...screen.queryAllByTestId(/loading/i),
-      ...screen.quyAllByText(/loading/i)
+      ...screen.queryAllByText(/loading/i)
     ],
     { timeout: 5000 },
   );
