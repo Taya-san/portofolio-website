@@ -17,7 +17,6 @@ export const AuthLoader = ({
 
   if (user.isPending) return renderLoading();
   if (user.isError) return <div>Something went wrong here</div>;
-  if (!user) return null;
 
   return children;
 };

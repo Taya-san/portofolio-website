@@ -1,3 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
+// This module only exports test helpers (render, userEvent, rtlRender).
+// The react-refresh rule cannot see through `export *`, so it guesses wrong here.
+
 import { render as rtlRender } from '@testing-library/react';
 
 import { screen, waitForElementToBeRemoved } from '@testing-library/dom';
@@ -8,7 +12,7 @@ import userEvent from '@testing-library/user-event';
 import Cookies from 'js-cookie';
 import { RouterProvider, createMemoryRouter } from 'react-router';
 
-// import { AppProvider } from '@/app/provider';
+import { AppProvider } from '@/app/provider';
 
 import {
   createUser as generateUser,

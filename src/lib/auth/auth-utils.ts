@@ -43,12 +43,10 @@ export const useLogin = (
   const { onSuccess, ...restConfig } = mutationConfig || {};
 
   return useMutation({
-    mutationFn: (data: LoginInput) => {
-      return loginWithPassword(data);
-    },
-    onSuccess: (user, ...restArgs) => {
-      queryClient.setQueryData(AUTH_USER_KEY, user);
-      onSuccess?.(user, ...restArgs);
+    mutationFn: loginWithPassword,
+    onSuccess: (response, ...restArgs) => {
+      queryClient.setQueryData(AUTH_USER_KEY, response.user);
+      onSuccess?.(response, ...restArgs);
     },
     ...restConfig,
   });
