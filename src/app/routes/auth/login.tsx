@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 
 import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import { paths } from '@/config/paths';
 import { loginInputSchema, useLogin } from '@/lib/auth';
 
@@ -71,8 +72,9 @@ const LoginRoute = () => {
           </p>
         )}
 
-        <Button isLoading={login.isPending} type="submit">
-          Log in
+        <Button disabled={login.isPending} type="submit">
+          {login.isPending && <Spinner size="sm" className="text-current" />}
+          {login.isPending ? 'Loggin in...' : 'Log in'}
         </Button>
       </form>
     </div>

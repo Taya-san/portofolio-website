@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/sheet';
 import { paths } from '@/config/paths';
 import { useLogout } from '@/lib/auth';
-import { cn } from '@/utils/cn';
+import { cn } from '@/lib/utils';
 
 import type { ReactNode } from 'react';
 
@@ -178,7 +178,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem
-                className={cn('block w-full px-4 py-2 text-sm text-gray-700')}
+                className={cn('block w-full px-4 py-2 text-sm text-foreground')}
                 onClick={() => logout.mutate()}
               >
                 Sign Out
