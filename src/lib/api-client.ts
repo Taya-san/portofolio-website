@@ -23,8 +23,10 @@ api.interceptors.response.use(
   },
 
   (error) => {
-    if (error.response?.status === 401) {
-      const searchParams = new URLSearchParams();
+    const isAuthCheck = error.config?.url?.includes('auth/me');
+
+    if (error.response?.status === 401 && !isAuthCheck) {
+      const searchParams = new URLSearchParams(window.location.search);
       const redirectTo =
         searchParams.get('redirectTo') || window.location.pathname;
       window.location.href = paths.auth.login.getHref(redirectTo);

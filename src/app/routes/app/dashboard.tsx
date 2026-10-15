@@ -3,8 +3,14 @@ import { Link } from 'react-router';
 import { paths } from '@/config/paths';
 import { useProjects } from '@/features/projects/api/get-projects';
 
+import { useState } from 'react';
+
+import { ProjectsToolbar } from '@/components/ui/projects-toolbar';
+
 const DashboardRoute = () => {
   const projectsQuery = useProjects();
+
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   if (projectsQuery.isPending) {
     return <p className="text-muted-foreground">Loading projects...</p>;
@@ -23,6 +29,11 @@ const DashboardRoute = () => {
   return (
     <div className="flex w-full flex-col gap-6">
       <h1 className="text-2xl font-semibold tracking-tight">Projects</h1>
+
+      <ProjectsToolbar
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+      />
 
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (

@@ -81,7 +81,7 @@ const Progress = () => {
 export function DashboardLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const logout = useLogout({
-    onSuccess: () => navigate(paths.auth.login.getHref(location.pathname)),
+    onSuccess: () => navigate(paths.home.getHref()),
   });
 
   const navigation: SideNavigationItem[] = [

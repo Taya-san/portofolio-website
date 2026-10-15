@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router';
 import { paths } from '@/config/paths';
 import { useProject } from '@/features/projects/api/get-project';
 
+import { Button } from '@/components/ui/button/button';
+
 const ProjectRoute = () => {
   const { projectId } = useParams();
   const projectQuery = useProject({ projectId: projectId as string });
@@ -19,12 +21,23 @@ const ProjectRoute = () => {
 
   return (
     <article className="flex w-full flex-col gap-6">
-      <Link
-        className="text-sm text-muted-foreground underline underline-offset-4"
-        to={paths.app.dashboard.getHref()}
-      >
-        Back to projects
-      </Link>
+      <div className="flex flex-row gap-6">
+        <Link
+          className="text-sm text-muted-foreground underline underline-offset-4"
+          to={paths.app.dashboard.getHref()}
+        >
+          Back to projects
+        </Link>
+
+        <Button asChild>
+          <Link
+            className="text-sm text-foreground"
+            to={paths.app.edit.getHref(`${projectId}`)}
+          >
+            Edit
+          </Link>
+        </Button>
+      </div>
 
       <header className="flex flex-col gap-2">
         <h1 className="text-3xl font-semibold tracking-tight">

@@ -58,9 +58,9 @@ export const useLogout = (mutationConfig?: MutationConfig<typeof logout>) => {
 
   return useMutation({
     mutationFn: () => logout(),
-    onSuccess: (...args) => {
+    onSuccess: async (...args) => {
+      await onSuccess?.(...args);
       queryClient.setQueryData(AUTH_USER_KEY, null);
-      onSuccess?.(...args);
     },
     ...restConfig,
   });
