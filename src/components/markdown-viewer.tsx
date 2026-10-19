@@ -12,7 +12,7 @@ export const MarkdownView = ({ children }: MarkdownProps) => {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeSanitize]}
+      rehypePlugins={[rehypeRaw, rehypeSanitize, rehypeHighlight]}
     >
       {children}
     </ReactMarkdown>
