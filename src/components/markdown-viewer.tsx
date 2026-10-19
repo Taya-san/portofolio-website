@@ -5,7 +5,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import rehypeHighlight from 'rehype-highlight';
 
 type MarkdownProps = {
-  children: string
+  children: string;
 };
 
 export const MarkdownView = ({ children }: MarkdownProps) => {
@@ -16,5 +16,5 @@ export const MarkdownView = ({ children }: MarkdownProps) => {
     >
       {children}
     </ReactMarkdown>
-  )
+  );
 };

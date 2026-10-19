@@ -11,8 +11,8 @@ export const enableMocking = async () => {
       onUnhandledRequest: (request, print) => {
         if (request.url.startsWith(env.API_URL)) {
           print.warning();
-        };
-      }
+        }
+      },
     });
-  };
+  }
 };

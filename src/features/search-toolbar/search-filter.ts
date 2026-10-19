@@ -1,33 +1,32 @@
-import type { CustomProject } from "@/types/api";
+import type { CustomProject } from '@/types/api';
 
 export type SearchFilters = {
-  languages: string[]
+  languages: string[];
 };
 
 export const collectLanguages = (projects: CustomProject[]): string[] => {
-  return [...new Set(projects.flatMap((project) => project.languages))].sort((b, a) => b.localeCompare(a))
+  return [...new Set(projects.flatMap((project) => project.languages))].sort(
+    (b, a) => b.localeCompare(a),
+  );
 };
 
 export const matchesFilters = (
   project: CustomProject,
   filters: SearchFilters,
-  searchQuery: string
+  searchQuery: string,
 ): boolean => {
   const query = searchQuery.trim().toLowerCase();
 
-  if (
-    query &&
-    !project.title.toLowerCase().includes(query)
-  ) {
-    return false
-  };
+  if (query && !project.title.toLowerCase().includes(query)) {
+    return false;
+  }
 
   if (
     filters.languages.length > 0 &&
     !project.languages.some((language) => filters.languages.includes(language))
   ) {
-    return false
-  };
+    return false;
+  }
 
-  return true
-}
+  return true;
+};

@@ -9,7 +9,7 @@ const models = {
     languages: () => [] as string[],
     createdAt: String,
     visible: Boolean,
-    body: String
+    body: String,
   },
   user: {
     id: primaryKey(nanoid),

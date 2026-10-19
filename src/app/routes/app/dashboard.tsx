@@ -5,15 +5,9 @@ import { useProjects } from '@/features/projects/api/get-projects';
 
 import { useState } from 'react';
 
-import type {
-  SearchFilters,
-  SortKey
-} from '@/features/search-toolbar';
+import type { SearchFilters, SortKey } from '@/features/search-toolbar';
 
-import {
-  matchesFilters,
-  sorters
-} from '@/features/search-toolbar';
+import { matchesFilters, sorters } from '@/features/search-toolbar';
 
 import { SearchToolbar } from '@/components/ui/search-toolbar';
 
@@ -21,8 +15,8 @@ const DashboardRoute = () => {
   const projectsQuery = useProjects();
 
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [filters, setFilters] = useState<SearchFilters>({languages: []})
-  const [sort, setSort] = useState<SortKey>('default')
+  const [filters, setFilters] = useState<SearchFilters>({ languages: [] });
+  const [sort, setSort] = useState<SortKey>('default');
 
   if (projectsQuery.isPending) {
     return <p className="text-muted-foreground">Loading projects...</p>;

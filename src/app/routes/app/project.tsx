@@ -56,9 +56,7 @@ const ProjectRoute = () => {
       </header>
 
       <div className="typeset typeset-docs">
-        <MarkdownView>
-          {project.body}
-        </MarkdownView>
+        <MarkdownView>{project.body}</MarkdownView>
       </div>
     </article>
   );

@@ -17,10 +17,7 @@ import {
   PopoverAnchor,
 } from '@/components/ui/popover';
 
-import {
-  ToggleGroup,
-  ToggleGroupItem
-} from './toggle-group';
+import { ToggleGroup, ToggleGroupItem } from './toggle-group';
 
 import { Button } from '@/components/ui/button/button';
 
@@ -40,12 +37,12 @@ type FilterPanelProps = {
   filters: SearchFilters;
   onFiltersChange: Dispatch<SetStateAction<SearchFilters>>;
   languageOptions: string[];
-}
+};
 
 type SortPanelProps = {
   sort: SortKey;
   onSortChange: Dispatch<SetStateAction<SortKey>>;
-}
+};
 
 type Panel = 'filter' | 'sort';
 
@@ -56,7 +53,7 @@ export const SearchToolbar = ({
   filters,
   onFiltersChange,
   sort,
-  onSortChange
+  onSortChange,
 }: SearchToolbarProps) => {
   const [panel, setPanel] = useState<Panel>('filter');
   const [open, setOpen] = useState<boolean>(false);
@@ -111,17 +108,15 @@ export const SearchToolbar = ({
               interactedOutside.current = false;
             }}
           >
-            {
-              panel === 'filter' ?
-                <FilterPanel
-                  filters={filters}
-                  onFiltersChange={onFiltersChange}
-                  languageOptions={languages}
-                /> :
-                <SortPanel
-                  sort={sort}
-                  onSortChange={onSortChange}
-                />}
+            {panel === 'filter' ? (
+              <FilterPanel
+                filters={filters}
+                onFiltersChange={onFiltersChange}
+                languageOptions={languages}
+              />
+            ) : (
+              <SortPanel sort={sort} onSortChange={onSortChange} />
+            )}
           </PopoverContent>
         </Popover>
 
@@ -152,10 +147,10 @@ export const SearchToolbar = ({
 const FilterPanel = ({
   filters,
   onFiltersChange,
-  languageOptions
+  languageOptions,
 }: FilterPanelProps) => {
   return (
-    <div className='flex flex-col gap-2'>
+    <div className="flex flex-col gap-2">
       <h4 className="font-medium">Programming Language</h4>
       <ToggleGroup
         type="multiple"
@@ -164,56 +159,45 @@ const FilterPanel = ({
         onValueChange={(languages) => {
           onFiltersChange({
             ...filters,
-            languages
-          })
+            languages,
+          });
         }}
-        className='w-full flex flex-wrap'
+        className="flex w-full flex-wrap"
       >
-        {
-          languageOptions.map((language) => {
-            return (
-              <ToggleGroupItem
-                key={language}
-                value={language}
-              >
-                {capitalize(language)}
-              </ToggleGroupItem>
-            )
-          })
-        }
+        {languageOptions.map((language) => {
+          return (
+            <ToggleGroupItem key={language} value={language}>
+              {capitalize(language)}
+            </ToggleGroupItem>
+          );
+        })}
       </ToggleGroup>
     </div>
-  )
+  );
 };
 
-const SortPanel = ({
-  sort,
-  onSortChange,
-}: SortPanelProps) => {
+const SortPanel = ({ sort, onSortChange }: SortPanelProps) => {
   return (
-    <div className='flex flex-col gap-2'>
+    <div className="flex flex-col gap-2">
       <h4 className="font-medium">Sort</h4>
       <ToggleGroup
         type="single"
         variant={'default'}
         value={sort}
         onValueChange={(value) => {
-          onSortChange((value || 'default') as SortKey)
+          onSortChange((value || 'default') as SortKey);
         }}
-        className='w-full flex flex-wrap'
+        className="flex w-full flex-wrap"
       >
-        {
-          (SORT_OPTIONS.filter((sort) => sort.value !== 'default')).map((option) => {
+        {SORT_OPTIONS.filter((sort) => sort.value !== 'default').map(
+          (option) => {
             return (
-              <ToggleGroupItem
-                key={option.value}
-                value={option.value}
-              >
+              <ToggleGroupItem key={option.value} value={option.value}>
                 {option.label}
               </ToggleGroupItem>
-            )
-          })
-        }
+            );
+          },
+        )}
       </ToggleGroup>
     </div>
   );
