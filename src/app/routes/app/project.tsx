@@ -5,6 +5,8 @@ import { useProject } from '@/features/projects/api/get-project';
 
 import { Button } from '@/components/ui/button/button';
 
+import { MarkdownView } from '@/components/markdown-viewer';
+
 const ProjectRoute = () => {
   const { projectId } = useParams();
   const projectQuery = useProject({ projectId: projectId as string });
@@ -53,8 +55,10 @@ const ProjectRoute = () => {
         </a>
       </header>
 
-      <div className="text-sm leading-relaxed whitespace-pre-wrap">
-        {project.body}
+      <div className="typeset typeset-docs">
+        <MarkdownView>
+          {project.body}
+        </MarkdownView>
       </div>
     </article>
   );

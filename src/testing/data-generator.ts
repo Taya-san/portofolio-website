@@ -4,6 +4,8 @@ import {
   randImg,
   randUrl,
   randPassword,
+  randProgrammingLanguage,
+  randPastDate
 } from '@ngneat/falso';
 
 import type { User, CustomProject } from '@/types/mocks';
@@ -14,6 +16,9 @@ type DataCreator<T, K> = (overrides?: Partial<T>) => K;
 const generateCustomProject: DataGenerator<CustomProject> = () => ({
   project_url: randUrl(),
   title: randCatchPhrase(),
+  languages: [randProgrammingLanguage(), randProgrammingLanguage()],
+  createdAt: randPastDate({years: 3}).toISOString(),
+  visible: true,
   body: randParagraph() + `\n\n![Demo Screenshot](${randImg()})`,
 });
 

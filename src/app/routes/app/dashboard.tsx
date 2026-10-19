@@ -5,12 +5,24 @@ import { useProjects } from '@/features/projects/api/get-projects';
 
 import { useState } from 'react';
 
-import { ProjectsToolbar } from '@/components/ui/projects-toolbar';
+import type {
+  SearchFilters,
+  SortKey
+} from '@/features/search-toolbar';
+
+import {
+  matchesFilters,
+  sorters
+} from '@/features/search-toolbar';
+
+import { SearchToolbar } from '@/components/ui/search-toolbar';
 
 const DashboardRoute = () => {
   const projectsQuery = useProjects();
 
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [filters, setFilters] = useState<SearchFilters>({languages: []})
+  const [sort, setSort] = useState<SortKey>('default')
 
   if (projectsQuery.isPending) {
     return <p className="text-muted-foreground">Loading projects...</p>;
@@ -20,19 +32,26 @@ const DashboardRoute = () => {
     return <p className="text-destructive">Could not load projects.</p>;
   }
 
-  const projects = projectsQuery.data.data;
-
-  if (projects.length === 0) {
+  if (projectsQuery.data.data.length === 0) {
     return <p className="text-muted-foreground">No projects yet.</p>;
   }
+
+  const projects = projectsQuery.data.data
+    .filter((project) => matchesFilters(project, filters, searchQuery))
+    .sort(sorters[sort]);
 
   return (
     <div className="flex w-full flex-col gap-6">
       <h1 className="text-2xl font-semibold tracking-tight">Projects</h1>
 
-      <ProjectsToolbar
+      <SearchToolbar
+        projects={projectsQuery.data.data}
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
+        filters={filters}
+        onFiltersChange={setFilters}
+        sort={sort}
+        onSortChange={setSort}
       />
 
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -6,7 +6,10 @@ const models = {
     id: primaryKey(nanoid),
     project_url: String,
     title: String,
-    body: String,
+    languages: () => [] as string[],
+    createdAt: String,
+    visible: Boolean,
+    body: String
   },
   user: {
     id: primaryKey(nanoid),

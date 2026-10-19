@@ -7,6 +7,12 @@ export const enableMocking = async () => {
     const { seedDb } = await import('./seed');
     await initializeDb();
     await seedDb();
-    return worker.start();
-  }
+    return worker.start({
+      onUnhandledRequest: (request, print) => {
+        if (request.url.startsWith(env.API_URL)) {
+          print.warning();
+        };
+      }
+    });
+  };
 };

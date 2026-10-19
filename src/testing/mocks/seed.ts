@@ -10,6 +10,9 @@ const projects = [
   {
     title: 'Terminal Dashboard',
     project_url: 'https://github.com/',
+    languages: ['Typescript', 'Go', 'C'],
+    createdAt: '2024-02-27',
+    visible: true,
     body: `A keyboard-driven dashboard that shows the state of my home server.
 
 ## Why
@@ -25,6 +28,9 @@ I wanted a single screen that tells me if anything is on fire.
   {
     title: 'Markdown Notes',
     project_url: 'https://github.com/',
+    languages: ['Typescript', 'Python', 'Ruby'],
+    createdAt: '2024-10-19',
+    visible: true,
     body: `A local-first notes app. Everything lives in a folder of plain
 markdown files, so nothing is locked in a database.
 
@@ -41,6 +47,9 @@ I kept losing notes inside apps that shut down.
   {
     title: 'Home Lab Monitor',
     project_url: 'https://github.com/',
+    languages: ['Python', 'Python Notebook'],
+    createdAt: '2025-01-07',
+    visible: true,
     body: `Alerts to my phone when a service on the home server stops responding.
 
 ## Why

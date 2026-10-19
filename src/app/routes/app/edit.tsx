@@ -25,6 +25,16 @@ const EditRoute = () => {
             {projectId}
           </code>
         </p>
+        <div
+          className='grid grid-cols-2'
+        >
+          <p>
+            edit here
+          </p>
+          <p>
+            view here
+          </p>
+        </div>
       </div>
     </ProtectedRoute>
   );

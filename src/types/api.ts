@@ -13,6 +13,9 @@ export type User = Entity<unknown>;
 export type CustomProject = Entity<{
   project_url: string;
   title: string;
+  languages: string[];
+  createdAt: string;
+  visible: boolean;
   body: string;
 }>;
 
