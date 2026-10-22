@@ -1,11 +1,24 @@
 import { Link, useParams } from 'react-router';
-
 import { paths } from '@/config/paths';
-
 import { ProtectedRoute } from '@/lib/auth';
+import { useProject } from '@/features/projects/api/get-project';
+import { ProjectEditor } from '@/components/ui/edit-page';
 
 const EditRoute = () => {
   const { projectId } = useParams();
+  const projectQuery = useProject({ projectId: projectId as string });
+
+  if (projectQuery.isPending) {
+    return <p className="text-muted-foreground">Loading project...</p>;
+  }
+
+  if (projectQuery.isError) {
+    return (
+      <p className="text-destructive">Could not load this project... sadly</p>
+    );
+  }
+
+  const project = projectQuery.data.data;
 
   return (
     <ProtectedRoute>
@@ -17,18 +30,11 @@ const EditRoute = () => {
           Back to project
         </Link>
 
-        <h1 className="text-2xl font-semibold tracking-tight">Edit project</h1>
-
-        <p className="text-sm text-muted-foreground">
-          The editor goes here. The route already knows which project it is:
-          <code className="ml-1 rounded bg-muted px-1.5 py-0.5">
-            {projectId}
-          </code>
-        </p>
-        <div className="grid grid-cols-2">
-          <p>edit here</p>
-          <p>view here</p>
-        </div>
+        <ProjectEditor
+          title={project.title}
+          body={project.body}
+          visible={project.visible}
+        />
       </div>
     </ProtectedRoute>
   );

@@ -8,12 +8,12 @@ import {
   randPastDate,
 } from '@ngneat/falso';
 
-import type { User, CustomProject } from '@/types/mocks';
+import type { User, CustomProject } from '@/types/api';
 
 type DataGenerator<T> = () => T;
 type DataCreator<T, K> = (overrides?: Partial<T>) => K;
 
-const generateCustomProject: DataGenerator<CustomProject> = () => ({
+const generateCustomProject: DataGenerator<Omit<CustomProject, 'id'>> = () => ({
   project_url: randUrl(),
   title: randCatchPhrase(),
   languages: [randProgrammingLanguage(), randProgrammingLanguage()],
@@ -29,7 +29,7 @@ export const createCustomProject: DataCreator<
   return { ...generateCustomProject(), ...overrides };
 };
 
-const generateUser: DataGenerator<User> = () => ({
+const generateUser: DataGenerator<Omit<User, 'id'>> = () => ({
   password: randPassword(),
 });
 

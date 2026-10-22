@@ -5,6 +5,8 @@ import { env } from '@/config/env';
 import { db } from '../db';
 import { networkDelay } from '../utils';
 
+import type { CustomProject } from '@/types/api';
+
 export const projectsHandlers = [
   http.get(`${env.API_URL}/projects`, async () => {
     await networkDelay();
@@ -50,4 +52,39 @@ export const projectsHandlers = [
       );
     }
   }),
+
+  http.patch(
+    `${env.API_URL}/projects/:projectId`,
+    async ({ params, request }) => {
+      await networkDelay();
+
+      try {
+        const projectId = params.projectId as string;
+        const updates = request.json() as Partial<CustomProject>;
+
+        const project = db.project.update({
+          where: {
+            id: {
+              equals: projectId,
+            },
+          },
+          data: updates,
+        });
+
+        if (!project) {
+          return HttpResponse.json(
+            { message: 'Project not found' },
+            { status: 404 },
+          );
+        }
+
+        return HttpResponse.json({ data: project });
+      } catch (error: unknown) {
+        return HttpResponse.json(
+          { message: error instanceof Error ? error.message : 'Server Error' },
+          { status: 500 },
+        );
+      }
+    },
+  ),
 ];

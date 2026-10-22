@@ -5,7 +5,7 @@ import { useProject } from '@/features/projects/api/get-project';
 
 import { Button } from '@/components/ui/button/button';
 
-import { MarkdownView } from '@/components/markdown-viewer';
+import { MarkdownView } from '@/components/ui/markdown-viewer';
 
 const ProjectRoute = () => {
   const { projectId } = useParams();
