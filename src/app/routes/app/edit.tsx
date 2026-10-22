@@ -31,6 +31,7 @@ const EditRoute = () => {
         </Link>
 
         <ProjectEditor
+          id={project.id}
           title={project.title}
           body={project.body}
           visible={project.visible}

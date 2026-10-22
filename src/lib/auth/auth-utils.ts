@@ -1,11 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
+import { api } from '../api-client';
+import { getProjectsQueryOptions } from '@/features/projects/api/get-projects';
 
 import type { AuthResponse, User } from '@/types/api';
-
 import type { MutationConfig } from '../react-query';
-
-import { api } from '../api-client';
 
 const getUser = async (): Promise<User> => {
   const response = await api.get('/auth/me');
@@ -46,6 +45,9 @@ export const useLogin = (
     mutationFn: loginWithPassword,
     onSuccess: (response, ...restArgs) => {
       queryClient.setQueryData(AUTH_USER_KEY, response.user);
+      queryClient.removeQueries({
+        queryKey: getProjectsQueryOptions().queryKey,
+      });
       onSuccess?.(response, ...restArgs);
     },
     ...restConfig,
@@ -61,6 +63,9 @@ export const useLogout = (mutationConfig?: MutationConfig<typeof logout>) => {
     onSuccess: async (...args) => {
       await onSuccess?.(...args);
       queryClient.setQueryData(AUTH_USER_KEY, null);
+      queryClient.removeQueries({
+        queryKey: getProjectsQueryOptions().queryKey,
+      });
     },
     ...restConfig,
   });

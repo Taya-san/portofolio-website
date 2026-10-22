@@ -1,15 +1,14 @@
 import { Link, useParams } from 'react-router';
-
 import { paths } from '@/config/paths';
 import { useProject } from '@/features/projects/api/get-project';
-
 import { Button } from '@/components/ui/button/button';
-
 import { MarkdownView } from '@/components/ui/markdown-viewer';
+import { useUser } from '@/lib/auth';
 
 const ProjectRoute = () => {
   const { projectId } = useParams();
   const projectQuery = useProject({ projectId: projectId as string });
+  const user = useUser();
 
   if (projectQuery.isPending) {
     return <p className="text-muted-foreground">Loading project...</p>;
@@ -31,14 +30,18 @@ const ProjectRoute = () => {
           Back to projects
         </Link>
 
-        <Button asChild>
-          <Link
-            className="text-sm text-foreground"
-            to={paths.app.edit.getHref(`${projectId}`)}
-          >
-            Edit
-          </Link>
-        </Button>
+        {user.data ? (
+          <Button asChild>
+            <Link
+              className="text-sm text-foreground"
+              to={paths.app.edit.getHref(`${projectId}`)}
+            >
+              Edit
+            </Link>
+          </Button>
+        ) : (
+          <div className="size-3.75"></div>
+        )}
       </div>
 
       <header className="flex flex-col gap-2">

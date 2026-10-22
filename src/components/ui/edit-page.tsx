@@ -5,18 +5,53 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useId } from 'react';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { useUpdateProject } from '@/features/projects/api/update-projects';
+import type { CustomProject } from '@/types/api';
 
-export type ProjectEditorProps = {
-  title: string;
-  body: string;
-  visible: boolean;
-};
+export type ProjectEditorProps = Partial<CustomProject> &
+  Pick<CustomProject, 'id'>;
 
-export const ProjectEditor = ({ title, body, visible }: ProjectEditorProps) => {
+export const ProjectEditor = ({
+  id,
+  title,
+  body,
+  visible,
+}: ProjectEditorProps) => {
   const [titleState, setTitleState] = useState(title);
-  const [bodyState, setBodyState] = useState(body);
+  const [bodyState, setBodyState] = useState(body ?? '');
   const [visibleState, setVisibleState] = useState(visible);
+  const [saved, setSaved] = useState({ title, body, visible });
+
   const visibilityId = useId();
+
+  const updateProject = useUpdateProject({
+    mutationConfig: {
+      onSuccess: (response) => {
+        setSaved({
+          title: response.data.title,
+          body: response.data.body,
+          visible: response.data.visible,
+        });
+      },
+    },
+  });
+
+  const saveHandler = () => {
+    updateProject.mutate({
+      data: {
+        id,
+        title: titleState,
+        body: bodyState,
+        visible: visibleState,
+      },
+    });
+  };
+
+  const isDirty =
+    titleState !== saved.title ||
+    bodyState !== saved.body ||
+    visibleState !== saved.visible;
 
   return (
     <>
@@ -42,7 +77,18 @@ export const ProjectEditor = ({ title, body, visible }: ProjectEditorProps) => {
           ariaLabel="Markdown body"
           extensions={[markdown()]}
         />
-        <MarkdownView>{bodyState}</MarkdownView>
+        <div className="typeset typset-docs h-128 overflow-y-auto">
+          <MarkdownView>{bodyState}</MarkdownView>
+        </div>
+      </div>
+
+      <div className="flex w-full flex-row gap-4">
+        <Button
+          onClick={saveHandler}
+          disabled={!isDirty || updateProject.isPending}
+        >
+          Save
+        </Button>
       </div>
     </>
   );

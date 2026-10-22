@@ -1,24 +1,15 @@
-import { Home, PanelLeft, User2 } from 'lucide-react';
+import { User2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { NavLink, useNavigate, useNavigation } from 'react-router';
+import { useNavigate, useNavigation } from 'react-router';
 
 import logo from '@/assets/logo.svg';
 import { Button } from '@/components/ui/button';
-// NOTE: these four do not exist yet. They are produced by:
-//   npx shadcn@latest add button dropdown-menu sheet
-import {
-  Sheet,
-  SheetContent,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
 import { paths } from '@/config/paths';
 import { useLogout } from '@/lib/auth';
 import { cn } from '@/lib/utils';
+import { useUser } from '@/lib/auth';
 
 import type { ReactNode } from 'react';
-
-import type { LucideIcon } from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -27,12 +18,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Link } from '@/components/ui/link';
-
-type SideNavigationItem = {
-  name: string;
-  to: string;
-  icon: LucideIcon;
-};
 
 const Logo = () => {
   return (
@@ -83,108 +68,40 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const logout = useLogout({
     onSuccess: () => navigate(paths.home.getHref()),
   });
-
-  const navigation: SideNavigationItem[] = [
-    { name: 'Dashboard', to: paths.app.dashboard.getHref(), icon: Home },
-  ];
+  const user = useUser();
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-60 flex-col border-r bg-black sm:flex">
-        <nav className="flex flex-col items-center gap-4 px-2 py-4">
-          <div className="flex h-16 shrink-0 items-center px-4">
-            <Logo />
-          </div>
-          {navigation.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.to}
-              end
-              className={({ isActive }) =>
-                cn(
-                  'text-gray-300 hover:bg-gray-700 hover:text-white',
-                  'group flex w-full flex-1 items-center rounded-md p-2 text-base font-medium',
-                  isActive && 'bg-gray-900 text-white',
-                )
-              }
-            >
-              <item.icon
-                className={cn(
-                  'text-gray-400 group-hover:text-gray-300',
-                  'mr-4 size-6 shrink-0',
-                )}
-                aria-hidden="true"
-              />
-              {item.name}
-            </NavLink>
-          ))}
-        </nav>
-      </aside>
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-60">
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:justify-end sm:border-0 sm:bg-transparent sm:px-6">
+      <div className="flex flex-col sm:gap-4 sm:py-4">
+        <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-4 bg-transparent px-4 sm:static sm:h-auto sm:border-0 sm:px-6">
+          <Logo />
           <Progress />
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button size="icon" variant="outline" className="sm:hidden">
-                <PanelLeft className="size-5" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="left"
-              className="bg-black pt-10 text-white sm:max-w-60"
-            >
-              <SheetTitle className="sr-only">Navigation</SheetTitle>
-              <nav className="grid gap-6 text-lg font-medium">
-                <div className="flex h-16 shrink-0 items-center px-4">
-                  <Logo />
-                </div>
-                {navigation.map((item) => (
-                  <NavLink
-                    key={item.name}
-                    to={item.to}
-                    end
-                    className={({ isActive }) =>
-                      cn(
-                        'text-gray-300 hover:bg-gray-700 hover:text-white',
-                        'group flex w-full flex-1 items-center rounded-md p-2 text-base font-medium',
-                        isActive && 'bg-gray-900 text-white',
-                      )
-                    }
-                  >
-                    <item.icon
-                      className={cn(
-                        'text-gray-400 group-hover:text-gray-300',
-                        'mr-4 size-6 shrink-0',
-                      )}
-                      aria-hidden="true"
-                    />
-                    {item.name}
-                  </NavLink>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="overflow-hidden rounded-full"
-              >
-                <span className="sr-only">Open user menu</span>
-                <User2 className="size-6 rounded-full" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                className={cn('block w-full px-4 py-2 text-sm text-foreground')}
-                onClick={() => logout.mutate()}
-              >
-                Sign Out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {user.data ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="overflow-hidden rounded-full"
+                >
+                  <span className="sr-only">Open user menu</span>
+                  <User2 className="size-6 rounded-full" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  className={cn(
+                    'block w-full px-4 py-2 text-sm text-foreground',
+                  )}
+                  onClick={() => logout.mutate()}
+                >
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div className="size-6"></div>
+          )}
         </header>
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           {children}

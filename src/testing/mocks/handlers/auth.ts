@@ -90,8 +90,8 @@ export const authHandlers = [
     await networkDelay();
 
     try {
-      const { user } = requireAuth(cookies);
-      return HttpResponse.json({ data: user });
+      const { data } = requireAuth(cookies);
+      return HttpResponse.json({ data: data });
     } catch (error) {
       return HttpResponse.json(
         { message: error instanceof Error ? error.message : 'Server Error' },

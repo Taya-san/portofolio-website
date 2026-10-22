@@ -84,11 +84,11 @@ export const AUTH_COOKIE = `my_portofolio_website_hehe`;
 
 export const requireAuth = (
   cookies: Record<string, string> = {},
-): { error?: string; user: User | null } => {
+): { error?: string; data: User | null } => {
   try {
     const encodedToken = cookies[AUTH_COOKIE] || Cookies.get(AUTH_COOKIE);
     if (!encodedToken) {
-      return { error: 'Unauthorized', user: null };
+      return { error: 'Unauthorized', data: null };
     }
     const decodedToken = decode(encodedToken) as { id: string };
 
@@ -101,10 +101,10 @@ export const requireAuth = (
     });
 
     if (!user) {
-      return { error: 'Unauthorized', user: null };
+      return { error: 'Unauthorized', data: null };
     }
-    return { user: sanitizeUser(user) };
+    return { data: sanitizeUser(user) };
   } catch {
-    return { error: 'Unauthorized', user: null };
+    return { error: 'Unauthorized', data: null };
   }
 };
