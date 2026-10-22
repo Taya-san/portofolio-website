@@ -18,7 +18,7 @@ type RegisterBody = {
 
 type LoginBody = {
   password: string;
-}
+};
 
 export const authHandlers = [
   http.post(`${env.API_URL}/auth/register`, async ({ request }) => {
@@ -27,7 +27,7 @@ export const authHandlers = [
       const userObject = (await request.json()) as RegisterBody;
 
       db.user.create({
-        password: hash(userObject.password)
+        password: hash(userObject.password),
       });
 
       await persistDb('user');
@@ -46,7 +46,7 @@ export const authHandlers = [
         { message: error instanceof Error ? error.message : 'Server Error' },
         { status: 500 },
       );
-    };
+    }
   }),
 
   http.post(`${env.API_URL}/auth/login`, async ({ request }) => {
@@ -68,7 +68,7 @@ export const authHandlers = [
         { message: error instanceof Error ? error.message : 'Server Error' },
         { status: 500 },
       );
-    };
+    }
   }),
 
   http.post(`${env.API_URL}/auth/logout`, async () => {
@@ -90,13 +90,13 @@ export const authHandlers = [
     await networkDelay();
 
     try {
-      const { user } = requireAuth(cookies);
-      return HttpResponse.json({ data: user });
+      const { data } = requireAuth(cookies);
+      return HttpResponse.json({ data: data });
     } catch (error) {
       return HttpResponse.json(
         { message: error instanceof Error ? error.message : 'Server Error' },
         { status: 500 },
       );
-    };
-  })
+    }
+  }),
 ];

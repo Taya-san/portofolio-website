@@ -11,7 +11,7 @@ beforeEach(() => {
   const ResizeObersverMock = vi.fn(() => ({
     observe: vi.fn(),
     unobserve: vi.fn(),
-    disconnect: vi.fn()
+    disconnect: vi.fn(),
   }));
 
   vi.stubGlobal('ResizeObserver', ResizeObersverMock);
@@ -19,10 +19,10 @@ beforeEach(() => {
   window.btoa = (str: string) => Buffer.from(str, 'binary').toString('base64');
   window.atob = (str: string) => Buffer.from(str, 'base64').toString('binary');
 
-  initializeDb()
+  initializeDb();
 });
 
 afterEach(() => {
   server.resetHandlers();
-  resetDb()
+  resetDb();
 });
