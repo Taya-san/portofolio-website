@@ -8,7 +8,8 @@ import {
   randPastDate,
 } from '@ngneat/falso';
 
-import type { User, CustomProject } from '@/types/api';
+import type { CustomProject } from '@/types/api';
+import type { MockUser } from '@/types/mocks';
 
 type DataGenerator<T> = () => T;
 type DataCreator<T, K> = (overrides?: Partial<T>) => K;
@@ -29,7 +30,7 @@ export const createCustomProject: DataCreator<
   return { ...generateCustomProject(), ...overrides };
 };
 
-const generateUser: DataGenerator<Omit<User, 'id'>> = () => ({
+const generateUser: DataGenerator<Omit<MockUser, 'id'>> = () => ({
   password: randPassword(),
 });
 

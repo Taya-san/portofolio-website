@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-// This module only exports test helpers (render, userEvent, rtlRender).
+// This module only re-exports test helpers (render, userEvent, rtlRender).
 // The react-refresh rule cannot see through `export *`, so it guesses wrong here.
 
 import { render as rtlRender } from '@testing-library/react';
@@ -19,35 +19,35 @@ import {
   createCustomProject as generateCustomProject,
 } from './data-generator';
 
-import type { User, CustomProject } from '@/types/mocks';
+import type { CustomProject } from '@/types/api';
+import type { MockUser } from '@/types/mocks';
 
 import { db } from './mocks/db';
 import { AUTH_COOKIE, authenticate, hash } from './mocks/utils';
 
 type RenderOptions = {
-  user: User;
+  user: MockUser;
   url: string;
   path: string;
   [key: string]: unknown;
 };
 
-export const createUser = async <T extends User>(
+export const createUser = async <T extends Omit<MockUser, 'id'>>(
   userProperties?: T,
-): Promise<User> => {
-  const user = generateUser(userProperties);
-  await db.user.create({ password: hash(user.password) });
-  return user;
+): Promise<MockUser> => {
+  const generated = generateUser(userProperties);
+  const stored = await db.user.create({ password: hash(generated.password) });
+  return { ...generated, id: stored.id };
 };
 
-export const createCustomProject = async <T extends CustomProject>(
+export const createCustomProject = async <T extends Omit<CustomProject, 'id'>>(
   customProjectProperties?: T,
 ): Promise<CustomProject> => {
-  const customProject = generateCustomProject(customProjectProperties);
-  await db.project.create(customProject);
-  return customProject;
+  const generated = generateCustomProject(customProjectProperties);
+  return db.project.create(generated);
 };
 
-export const login = async (user: User) => {
+export const login = async (user: MockUser) => {
   const auth = await authenticate(user);
   Cookies.set(AUTH_COOKIE, auth.jwt);
   return auth;
@@ -63,7 +63,7 @@ export const waitForLoadingToFinish = () => {
   );
 };
 
-const initializeUser = async (user?: User | undefined) => {
+const initializeUser = async (user?: MockUser | undefined) => {
   if (typeof user === 'undefined') {
     const newUser = await createUser();
     return login(newUser);
