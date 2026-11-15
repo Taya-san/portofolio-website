@@ -34,6 +34,7 @@ jobs:
         run: yarn build
         env:
           VITE_APP_API_URL: ${{ vars.VITE_APP_API_URL }}
+          VITE_APP_ENABLE_MOCKING: false
 
       - name: Copy index.html to 404.html for SPA routing
         run: cp dist/index.html dist/404.html
