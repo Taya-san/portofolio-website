@@ -3,9 +3,9 @@ import { queryOptions, useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api-client';
 
 import type { QueryConfig } from '@/lib/react-query';
-import type { CustomProject } from '@/types/api';
+import type { ApiResponse } from '@/types/api-helper';
 
-export const getProjects = (): Promise<{ data: CustomProject[] }> => {
+export const getProjects = (): Promise<ApiResponse<'/projects', 'get'>> => {
   return api.get(`/projects`);
 };
 

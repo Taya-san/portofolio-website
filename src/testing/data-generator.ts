@@ -6,17 +6,20 @@ import {
   randPassword,
   randProgrammingLanguage,
   randPastDate,
+  randProductDescription,
 } from '@ngneat/falso';
 
-import type { CustomProject } from '@/types/api';
-import type { MockUser } from '@/types/mocks';
+import type { ApiRequest } from '@/types/api-helper';
 
 type DataGenerator<T> = () => T;
 type DataCreator<T, K> = (overrides?: Partial<T>) => K;
 
-const generateCustomProject: DataGenerator<Omit<CustomProject, 'id'>> = () => ({
+const generateCustomProject: DataGenerator<
+  ApiRequest<'/edit', 'post'>
+> = () => ({
   project_url: randUrl(),
   title: randCatchPhrase(),
+  description: randProductDescription(),
   languages: [randProgrammingLanguage(), randProgrammingLanguage()],
   createdAt: randPastDate({ years: 3 }).toISOString(),
   visible: true,
@@ -30,7 +33,7 @@ export const createCustomProject: DataCreator<
   return { ...generateCustomProject(), ...overrides };
 };
 
-const generateUser: DataGenerator<Omit<MockUser, 'id'>> = () => ({
+const generateUser: DataGenerator<{ password: string }> = () => ({
   password: randPassword(),
 });
 

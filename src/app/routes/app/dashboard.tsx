@@ -26,11 +26,11 @@ const DashboardRoute = () => {
     return <p className="text-destructive">Could not load projects.</p>;
   }
 
-  if (projectsQuery.data.data.length === 0) {
+  if (projectsQuery.data.total === 0) {
     return <p className="text-muted-foreground">No projects yet.</p>;
   }
 
-  const projects = projectsQuery.data.data
+  const projects = projectsQuery.data.projects
     .filter((project) => matchesFilters(project, filters, searchQuery))
     .sort(sorters[sort]);
 
@@ -39,7 +39,7 @@ const DashboardRoute = () => {
       <h1 className="text-2xl font-semibold tracking-tight">Projects</h1>
 
       <SearchToolbar
-        projects={projectsQuery.data.data}
+        projects={projectsQuery.data.projects}
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
         filters={filters}
@@ -57,7 +57,7 @@ const DashboardRoute = () => {
             >
               <h2 className="text-base font-medium">{project.title}</h2>
               <p className="line-clamp-3 text-sm text-muted-foreground">
-                {project.body}
+                {project.description}
               </p>
             </Link>
           </li>

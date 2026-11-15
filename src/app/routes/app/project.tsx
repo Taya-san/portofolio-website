@@ -18,7 +18,7 @@ const ProjectRoute = () => {
     return <p className="text-destructive">Could not load this project.</p>;
   }
 
-  const project = projectQuery.data.data;
+  const project = projectQuery.data;
 
   return (
     <article className="flex w-full flex-col gap-6">

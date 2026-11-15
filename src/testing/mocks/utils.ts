@@ -3,9 +3,7 @@ import { delay } from 'msw';
 
 import { db } from './db';
 
-import type { User } from '@/types/api';
-
-type RawUser = User & { password?: string; iat?: unknown };
+import type { ApiRequest } from '@/types/api-helper';
 
 export const encode = (obj: object): string => {
   const btoa =
@@ -53,15 +51,17 @@ const omit = <T extends object, K extends keyof T>(
   return result as Omit<T, K>;
 };
 
-export const sanitizeUser = <O extends RawUser>(user: O): User => {
-  return omit(user, ['password', 'iat']) as User;
+export const sanitizeUser = (
+  user: ApiRequest<'/auth/login', 'post'> & { id: string },
+): { id: string } => {
+  return omit(user, ['password']) as { id: string };
 };
 
 export const authenticate = ({
   password,
 }: {
   password: string;
-}): { user: User; jwt: string } => {
+}): { user: { id: string }; jwt: string } => {
   const matchedUser = db.user.findFirst({
     where: {
       password: {
@@ -80,11 +80,11 @@ export const authenticate = ({
   throw error;
 };
 
-export const AUTH_COOKIE = `my_portofolio_website_hehe`;
+export const AUTH_COOKIE = 'auth_token';
 
 export const requireAuth = (
   cookies: Record<string, string> = {},
-): { error?: string; data: User | null } => {
+): { error?: string; data: { id: string } | null } => {
   try {
     const encodedToken = cookies[AUTH_COOKIE] || Cookies.get(AUTH_COOKIE);
     if (!encodedToken) {

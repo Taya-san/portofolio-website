@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { SearchFilters, SortKey } from '@/features/search-toolbar';
-import type { CustomProject } from '@/types/api';
+import type { ApiResponse } from '@/types/api-helper';
 import { collectLanguages, SORT_OPTIONS } from '@/features/search-toolbar';
 import { useRef, useState } from 'react';
 import { capitalize } from '@/lib/capitalize';
@@ -24,7 +24,7 @@ import { Button } from '@/components/ui/button/button';
 import { Search, Funnel, ListSortAscending } from 'lucide-react';
 
 type SearchToolbarProps = {
-  projects: CustomProject[];
+  projects: ApiResponse<'/projects', 'get'>['projects'];
   searchQuery: string;
   onSearchQueryChange: Dispatch<SetStateAction<string>>;
   filters: SearchFilters;

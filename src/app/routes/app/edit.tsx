@@ -18,7 +18,7 @@ const EditRoute = () => {
     );
   }
 
-  const project = projectQuery.data.data;
+  const project = projectQuery.data;
 
   return (
     <ProtectedRoute>
@@ -32,9 +32,13 @@ const EditRoute = () => {
 
         <ProjectEditor
           id={project.id}
+          project_url={project.project_url}
+          createdAt={project.createdAt}
           title={project.title}
-          body={project.body}
+          description={project.description}
+          languages={project.languages}
           visible={project.visible}
+          body={project.body}
         />
       </div>
     </ProtectedRoute>

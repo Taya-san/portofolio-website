@@ -7,21 +7,40 @@ import { useId } from 'react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useUpdateProject } from '@/features/projects/api/update-projects';
-import type { CustomProject } from '@/types/api';
+import type { ApiRequest } from '@/types/api-helper';
 
-export type ProjectEditorProps = Partial<CustomProject> &
-  Pick<CustomProject, 'id'>;
+export type ProjectEditorProps = ApiRequest<'/edit/{id}', 'put'> & {
+  id: string;
+};
 
 export const ProjectEditor = ({
   id,
+  project_url,
+  createdAt,
   title,
-  body,
+  description,
+  languages,
   visible,
+  body,
 }: ProjectEditorProps) => {
+  const [projectURLState, setProjectURLState] = useState(project_url);
+  // const [createdAtState, setCreatedAtState] = useState(createdAt);
+  const [createdAtState] = useState(createdAt);
   const [titleState, setTitleState] = useState(title);
-  const [bodyState, setBodyState] = useState(body ?? '');
+  const [descriptionState, setDescriptionState] = useState(description);
+  // const [languagesState, setLangugagesState] = useState(languages);
+  const [languagesState] = useState(languages);
   const [visibleState, setVisibleState] = useState(visible);
-  const [saved, setSaved] = useState({ title, body, visible });
+  const [bodyState, setBodyState] = useState(body ?? '');
+  const [saved, setSaved] = useState({
+    project_url,
+    createdAt,
+    title,
+    description,
+    languages,
+    visible,
+    body,
+  });
 
   const visibilityId = useId();
 
@@ -29,9 +48,13 @@ export const ProjectEditor = ({
     mutationConfig: {
       onSuccess: (response) => {
         setSaved({
-          title: response.data.title,
-          body: response.data.body,
-          visible: response.data.visible,
+          project_url: response.project_url,
+          createdAt: response.createdAt,
+          title: response.title,
+          description: response.description,
+          languages: response.languages,
+          visible: response.visible,
+          body: response.body,
         });
       },
     },
@@ -39,19 +62,27 @@ export const ProjectEditor = ({
 
   const saveHandler = () => {
     updateProject.mutate({
+      id: id,
       data: {
-        id,
+        project_url: projectURLState,
+        createdAt: createdAtState,
         title: titleState,
-        body: bodyState,
+        description: descriptionState,
+        languages: languagesState,
         visible: visibleState,
+        body: bodyState,
       },
     });
   };
 
   const isDirty =
+    projectURLState !== saved.project_url ||
+    createdAtState !== saved.createdAt ||
     titleState !== saved.title ||
-    bodyState !== saved.body ||
-    visibleState !== saved.visible;
+    descriptionState !== saved.description ||
+    languagesState !== saved.languages ||
+    visibleState !== saved.visible ||
+    bodyState !== saved.body;
 
   return (
     <>
@@ -63,11 +94,29 @@ export const ProjectEditor = ({
         aria-label="Project title"
       />
 
+      <input
+        className="w-full border-none bg-transparent p-0 text-xl font-semibold tracking-tight text-muted-foreground/70 outline-none focus-visible:underline focus-visible:underline-offset-4"
+        spellCheck={false}
+        value={projectURLState}
+        onChange={(event) => setProjectURLState(event.target.value)}
+        placeholder="Hey name your project URL here man!"
+        aria-label="Project URL"
+      />
+
       <Label id={visibilityId}>Visibility</Label>
       <Switch
         checked={visibleState}
         onCheckedChange={setVisibleState}
         aria-labelledby={visibilityId}
+      />
+
+      <input
+        className="w-full border-none bg-transparent p-0 text-base font-semibold tracking-tight outline-none focus-visible:underline focus-visible:underline-offset-4"
+        spellCheck={false}
+        value={descriptionState}
+        onChange={(event) => setDescriptionState(event.target.value)}
+        placeholder="Hey name your project description here man!"
+        aria-label="Project description"
       />
 
       <div className="grid grid-cols-2">

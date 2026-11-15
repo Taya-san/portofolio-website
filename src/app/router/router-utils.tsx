@@ -64,4 +64,4 @@ export const createAppRouter = (queryClient: QueryClient) =>
       path: '*',
       lazy: () => import('../routes/not-found').then(convert(queryClient)),
     },
-  ]);
+  ], { basename: import.meta.env.BASE_URL });

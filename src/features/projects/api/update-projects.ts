@@ -5,16 +5,18 @@ import { api } from '@/lib/api-client';
 import { getProjectsQueryOptions } from './get-projects';
 
 import type { MutationConfig } from '@/lib/react-query';
-import type { CustomProject } from '@/types/api';
+import type { ApiRequest, ApiResponse } from '@/types/api-helper';
 
 export type UpdateProjectInput = {
-  data: Partial<CustomProject> & Pick<CustomProject, 'id'>;
+  id: string;
+  data: ApiRequest<'/edit/{id}', 'put'>;
 };
 
 const updateProject = ({
+  id,
   data,
-}: UpdateProjectInput): Promise<{ data: CustomProject }> => {
-  return api.patch(`projects/${data.id}`, data);
+}: UpdateProjectInput): Promise<ApiResponse<'/edit/{id}', 'put'>> => {
+  return api.put(`/edit/${id}`, data);
 };
 
 type UseUpdateProjectOptions = {

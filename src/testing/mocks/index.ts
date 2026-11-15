@@ -13,6 +13,9 @@ export const enableMocking = async () => {
   await seedDb();
 
   return worker.start({
+    serviceWorker: {
+      url: `${import.meta.env.BASE_URL}mockServiceWorker.js`
+    },
     onUnhandledRequest: (request, print) => {
       if (request.url.startsWith(env.API_URL)) {
         print.warning();
