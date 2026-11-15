@@ -6,14 +6,25 @@ const models = {
     id: primaryKey(nanoid),
     project_url: String,
     title: String,
+    description: String,
     languages: () => [] as string[],
     createdAt: String,
     visible: Boolean,
+    custom: Boolean,
     body: String,
   },
   user: {
     id: primaryKey(nanoid),
     password: String,
+  },
+  githubproject: {
+    id: primaryKey(nanoid),
+    project_url: String,
+    title: String,
+    description: String,
+    languages: () => [] as string[],
+    createdAt: String,
+    body: String,
   },
 };
 

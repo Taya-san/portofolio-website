@@ -1,4 +1,4 @@
-import type { CustomProject } from '@/types/api';
+import type { ApiResponse } from '@/types/api-helper';
 
 export const SORT_OPTIONS = [
   { value: 'default', label: 'Default' },
@@ -12,7 +12,10 @@ export type SortKey = (typeof SORT_OPTIONS)[number]['value'];
 
 export const sorters: Record<
   SortKey,
-  (b: CustomProject, a: CustomProject) => number
+  (
+    b: ApiResponse<'/projects', 'get'>['projects'][number],
+    a: ApiResponse<'/projects', 'get'>['projects'][number],
+  ) => number
 > = {
   default: () => 0,
   newest: (b, a) => +new Date(a.createdAt) - +new Date(b.createdAt),

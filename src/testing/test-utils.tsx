@@ -19,36 +19,37 @@ import {
   createCustomProject as generateCustomProject,
 } from './data-generator';
 
-import type { CustomProject } from '@/types/api';
-import type { MockUser } from '@/types/mocks';
+import type { ApiRequest } from '@/types/api-helper';
 
 import { db } from './mocks/db';
 import { AUTH_COOKIE, authenticate, hash } from './mocks/utils';
 
 type RenderOptions = {
-  user: MockUser;
+  user: ApiRequest<'/auth/login', 'post'>;
   url: string;
   path: string;
   [key: string]: unknown;
 };
 
-export const createUser = async <T extends Omit<MockUser, 'id'>>(
+export const createUser = async <T extends ApiRequest<'/auth/login', 'post'>>(
   userProperties?: T,
-): Promise<MockUser> => {
+): Promise<ApiRequest<'/auth/login', 'post'> & { id: string }> => {
   const generated = generateUser(userProperties);
-  const stored = await db.user.create({ password: hash(generated.password) });
+  const stored = db.user.create({ password: hash(generated.password) });
   return { ...generated, id: stored.id };
 };
 
-export const createCustomProject = async <T extends Omit<CustomProject, 'id'>>(
+export const createCustomProject = async <
+  T extends ApiRequest<'/edit', 'post'>,
+>(
   customProjectProperties?: T,
-): Promise<CustomProject> => {
+): Promise<ApiRequest<'/edit', 'post'> & { id: string }> => {
   const generated = generateCustomProject(customProjectProperties);
   return db.project.create(generated);
 };
 
-export const login = async (user: MockUser) => {
-  const auth = await authenticate(user);
+export const login = async (user: ApiRequest<'/auth/login', 'post'>) => {
+  const auth = authenticate(user);
   Cookies.set(AUTH_COOKIE, auth.jwt);
   return auth;
 };
@@ -63,7 +64,9 @@ export const waitForLoadingToFinish = () => {
   );
 };
 
-const initializeUser = async (user?: MockUser | undefined) => {
+const initializeUser = async (
+  user?: ApiRequest<'/auth/login', 'post'> | undefined,
+) => {
   if (typeof user === 'undefined') {
     const newUser = await createUser();
     return login(newUser);

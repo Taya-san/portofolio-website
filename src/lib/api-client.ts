@@ -23,13 +23,12 @@ api.interceptors.response.use(
   },
 
   (error) => {
-    const isAuthCheck = error.config?.url?.includes('auth/me');
-
-    if (error.response?.status === 401 && !isAuthCheck) {
+    if (error.response?.status === 401 && !error.config?.url?.includes("/auth/me")) {
+      const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
       const searchParams = new URLSearchParams(window.location.search);
       const redirectTo =
         searchParams.get('redirectTo') || window.location.pathname;
-      window.location.href = paths.auth.login.getHref(redirectTo);
+      window.location.href = `${basePath}${paths.auth.login.getHref(redirectTo)}`;
     }
 
     return Promise.reject(error);

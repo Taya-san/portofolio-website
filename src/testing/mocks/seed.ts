@@ -1,5 +1,6 @@
 import { db, persistDb } from './db';
 import { hash } from './utils';
+import { createCustomProject } from '../data-generator';
 
 // The password you type on /auth/login while the API is mocked.
 // Change this to whatever you like - it only exists in your browser's
@@ -71,6 +72,10 @@ export const seedDb = async () => {
 
   if (db.project.getAll().length === 0) {
     projects.forEach((project) => db.project.create(project));
+    for (let i: number = 0; i < 10; ++i) {
+      const customProject = createCustomProject();
+      db.project.create(customProject);
+    }
     await persistDb('project');
   }
 };

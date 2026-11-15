@@ -3,14 +3,14 @@ import { queryOptions, useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api-client';
 
 import type { QueryConfig } from '@/lib/react-query';
-import type { CustomProject } from '@/types/api';
+import type { ApiResponse } from '@/types/api-helper';
 
 export const getProject = ({
   projectId,
 }: {
   projectId: string;
-}): Promise<{ data: CustomProject }> => {
-  return api.get(`/projects/${projectId}`);
+}): Promise<ApiResponse<'/project/{id}', 'get'>> => {
+  return api.get(`/project/${projectId}`);
 };
 
 export const getProjectQueryOptions = (projectId: string) => {
